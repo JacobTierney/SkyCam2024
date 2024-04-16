@@ -29,22 +29,25 @@ volatile long encoderCounts3 = 0;
 volatile long encoderCounts4 = 0;
 float distancePerCount = 0.01; // Distance per encoder count (adjust based on your setup)
 
-// Array to store sets of desired coordinates
+// Array to store sets of desired coordinates BASE LOGIC
 const float targetCoordinates[][4] = {
 // Motor Location {A,B,C,D}
 // A--------B
 // ----------
 // C--------D
   {28.8, 28.8, 28.8, 28.8},   // Lift Set 1
-  {1, 1, 1, 1},   // MoveSet 1
+  {1, 1, 1, 1},   // MoveSetx 1
+{1, 1, 1, 1},   // MoveSety 1
   {2, 2, 1, 1},   // AngleSet 1
   //{0, 0, 0, 0},   // LowerSet 1
   {44.4, 44.4, 44.4, 44.4}    // Lift Set 2
-{1, 1, 1, 1},   // MoveSet 2
+{1, 1, 1, 1},   // MoveSetx 2
+{1, 1, 1, 1},   // MoveSety 2
 {2, 2, 1, 1},   // AngleSet 2
 //{0, 0, 0, 0},   // LowerSet 2
 {19.2, 19.2, 19.2, 19.2}    // Lift Set 3
-{1, 1, 1, 1},   // MoveSet 3
+{1, 1, 1, 1},   // MoveSetx 3
+{1, 1, 1, 1},   // MoveSety 3
 {2, 2, 1, 1},   // AngleSet 3
 //{0, 0, 0, 0},   // LowerSet 3
 };
