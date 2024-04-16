@@ -1,0 +1,29 @@
+// KY-040 Rotary Encoder Example
+// Taken from: https://docs.wokwi.com/parts/wokwi-ky-040
+// Copyright (C) 2021, Uri Shaked
+
+#define ENCODER_CLK 2
+#define ENCODER_DT  3
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(ENCODER_CLK, INPUT);
+  pinMode(ENCODER_DT, INPUT);
+}
+
+int lastClk = HIGH;
+
+void loop() {
+  int newClk = digitalRead(ENCODER_CLK);
+  if (newClk != lastClk) {
+    // There was a change on the CLK pin
+    lastClk = newClk;
+    int dtValue = digitalRead(ENCODER_DT);
+    if (newClk == LOW && dtValue == HIGH) {
+      Serial.println("Rotated clockwise ⏩");
+    }
+    if (newClk == LOW && dtValue == LOW) {
+      Serial.println("Rotated counterclockwise ⏪");
+    }
+  }
+}
