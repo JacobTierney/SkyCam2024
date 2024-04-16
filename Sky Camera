@@ -31,6 +31,10 @@ float distancePerCount = 0.01; // Distance per encoder count (adjust based on yo
 
 // Array to store sets of desired coordinates
 const float targetCoordinates[][4] = {
+// Motor Location {A,B,C,D}
+// A--------B
+// ----------
+// C--------D
   {28.8, 28.8, 28.8, 28.8},   // Lift Set 1
   {1, 1, 1, 1},   // MoveSet 1
   {2, 2, 1, 1},   // AngleSet 1
