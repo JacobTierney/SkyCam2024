@@ -1,11 +1,20 @@
 #include <Arduino.h>
 
-// Define pins for the KY-040 rotary encoder
-const int encoderPinA = 2;  // CLK or DT pin
-const int encoderPinB = 3;  // DT or CLK pin
+// Define pins for the KY-040 rotary encoders
+const int encoderPinA1 = 2;  // CLK or DT pin for encoder 1
+const int encoderPinB1 = 3;  // DT or CLK pin for encoder 1
+const int encoderPinA2 = 4;  // CLK or DT pin for encoder 2
+const int encoderPinB2 = 5;  // DT or CLK pin for encoder 2
+const int encoderPinA3 = 6;  // CLK or DT pin for encoder 3
+const int encoderPinB3 = 7;  // DT or CLK pin for encoder 3
+const int encoderPinA4 = 8;  // CLK or DT pin for encoder 4
+const int encoderPinB4 = 9;  // DT or CLK pin for encoder 4
 
-// Variables to keep track of encoder counts and distance traveled
-volatile long encoderCounts = 0;
+// Variables to keep track of encoder counts and calculate distance
+volatile long encoderCounts1 = 0;
+volatile long encoderCounts2 = 0;
+volatile long encoderCounts3 = 0;
+volatile long encoderCounts4 = 0;
 float distancePerCount = 0.01; // Distance per encoder count (adjust based on your setup)
 
 void setup() {
@@ -13,35 +22,107 @@ void setup() {
   Serial.begin(9600);
   
   // Set encoder pins as inputs with internal pullup resistors
-  pinMode(encoderPinA, INPUT_PULLUP);
-  pinMode(encoderPinB, INPUT_PULLUP);
+  pinMode(encoderPinA1, INPUT_PULLUP);
+  pinMode(encoderPinB1, INPUT_PULLUP);
+  pinMode(encoderPinA2, INPUT_PULLUP);
+  pinMode(encoderPinB2, INPUT_PULLUP);
+  pinMode(encoderPinA3, INPUT_PULLUP);
+  pinMode(encoderPinB3, INPUT_PULLUP);
+  pinMode(encoderPinA4, INPUT_PULLUP);
+  pinMode(encoderPinB4, INPUT_PULLUP);
   
-  // Attach interrupt to encoder pin A
-  attachInterrupt(digitalPinToInterrupt(encoderPinA), updateEncoder, CHANGE);
+  // Attach interrupts to encoder pins
+  attachInterrupt(digitalPinToInterrupt(encoderPinA1), updateEncoder1, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderPinA2), updateEncoder2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderPinA3), updateEncoder3, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderPinA4), updateEncoder4, CHANGE);
 }
 
 void loop() {
-  // Calculate distance traveled
-  float distance = encoderCounts * distancePerCount;
+  // Calculate distance traveled for each encoder
+  float distance1 = encoderCounts1 * distancePerCount;
+  float distance2 = encoderCounts2 * distancePerCount;
+  float distance3 = encoderCounts3 * distancePerCount;
+  float distance4 = encoderCounts4 * distancePerCount;
   
-  // Print distance to serial monitor
-  Serial.print("Distance: ");
-  Serial.print(distance);
+  // Print distances to serial monitor
+  Serial.print("Distance Encoder 1: ");
+  Serial.print(distance1);
+  Serial.println(" inches");
+  
+  Serial.print("Distance Encoder 2: ");
+  Serial.print(distance2);
+  Serial.println(" inches");
+  
+  Serial.print("Distance Encoder 3: ");
+  Serial.print(distance3);
+  Serial.println(" inches");
+
+  Serial.print("Distance Encoder 4: ");
+  Serial.print(distance4);
   Serial.println(" inches");
   
   delay(100); // Delay for stability
 }
 
-// Interrupt service routine to update encoder counts
-void updateEncoder() {
+// Interrupt service routine to update encoder count for encoder 1
+void updateEncoder1() {
   static int previousState = LOW;
-  int currentState = digitalRead(encoderPinB);
+  int currentState = digitalRead(encoderPinB1);
   
   if (currentState != previousState) {
-    if (digitalRead(encoderPinA) != currentState) {
-      encoderCounts++;
+    if (digitalRead(encoderPinA1) != currentState) {
+      encoderCounts1++;
     } else {
-      encoderCounts--;
+      encoderCounts1--;
+    }
+  }
+  
+  previousState = currentState;
+}
+
+// Interrupt service routine to update encoder count for encoder 2
+void updateEncoder2() {
+  static int previousState = LOW;
+  int currentState = digitalRead(encoderPinB2);
+  
+  if (currentState != previousState) {
+    if (digitalRead(encoderPinA2) != currentState) {
+      encoderCounts2++;
+    } else {
+      encoderCounts2--;
+    }
+  }
+  
+  previousState = currentState;
+}
+
+// Interrupt service routine to update encoder count for encoder 3
+void updateEncoder3() {
+  static int previousState = LOW;
+  int currentState = digitalRead(encoderPinB3);
+  
+  if (currentState != previousState) {
+    if (digitalRead(encoderPinA3) != currentState) {
+      encoderCounts3++;
+    } else {
+      encoderCounts3--;
+    }
+  }
+  
+  previousState = currentState;
+}
+
+// Interrupt service routine to update encoder count for encoder 4
+void updateEncoder4() {
+  static int previousState = LOW;
+  int currentState = digitalRead(encoderPinB4);
+  
+  if (currentState != previousState) {
+    if (digitalRead(encoderPinA4) != currentState) {
+      encoderCounts4++;
+    } else {
+      encoderCounts4--;
     }
   }
   
