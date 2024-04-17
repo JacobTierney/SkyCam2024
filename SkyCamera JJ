@@ -11,34 +11,34 @@ const int encoderPinA4 = 8;  // CLK or DT pin for encoder 4
 const int encoderPinB4 = 9;  // DT or CLK pin for encoder 4
 
 // Motor control pins for L298N motor controller 1
-const int motor1Pin1 = 10;    // Motor 1 control pin 1
-const int motor1Pin2 = 11;    // Motor 1 control pin 2
-const int motor2Pin1 = 12;    // Motor 2 control pin 1
-const int motor2Pin2 = 13;    // Motor 2 control pin 2
+const int motor1Pin1 = 36;    // Motor 1 control pin 1
+const int motor1Pin2 = 34;    // Motor 1 control pin 2
+const int motor2Pin1 = 32;    // Motor 2 control pin 1
+const int motor2Pin2 = 30;    // Motor 2 control pin 2
 
 // Motor control pins for L298N motor controller 2
-const int motor3Pin1 = A0;    // Motor 3 control pin 1
-const int motor3Pin2 = A1;    // Motor 3 control pin 2
-const int motor4Pin1 = A2;    // Motor 4 control pin 1
-const int motor4Pin2 = A3;    // Motor 4 control pin 2
+const int motor3Pin1 = 28;    // Motor 3 control pin 1
+const int motor3Pin2 = 26;    // Motor 3 control pin 2
+const int motor4Pin1 = 24;    // Motor 4 control pin 1
+const int motor4Pin2 = 22;    // Motor 4 control pin 2
 
 // Variables to keep track of encoder counts and calculate distance
-volatile long encoderCounts1 = 0;
-volatile long encoderCounts2 = 0;
-volatile long encoderCounts3 = 0;
-volatile long encoderCounts4 = 0;
+volatile long encoderCounts1 = 1;
+volatile long encoderCounts2 = 1;
+volatile long encoderCounts3 = 1;
+volatile long encoderCounts4 = 1;
 float distancePerCount = 0.01; // Distance per encoder count (adjust based on your setup)
 
 //Variables that will be the user inputed coordinates
-const double x = 1;
-const double y = 1;
-const double z = 1;
+const double x = 3.1;
+const double y = 6.8;
+const double z = 2.4;
 //Variables that turn the given coordiantes into inches to move the cables
 const double Z = sqrt(sq(z*12)+sq(69.9671));
 const double A = sqrt(sq(x*12)+sq(120-(y*12)))+Z;
 const double B = sqrt(sq(72-(x*12))+sq(120-(y*12)))+Z;
-const double C = sqrt(sq(x*12)+sq(y*12))+Z;
-const double D = sqrt(sq(72-(x*12))+sq(y*12))+Z;
+const double C = sqrt(sq(72-(x*12))+sq(y*12))+Z;
+const double D = sqrt(sq(x*12)+sq(y*12))+Z;
   
 // Array to store sets of desired coordinates BASE LOGIC
 //Maybe for ease of finding Z height move to middle of field first???
@@ -47,7 +47,7 @@ const float targetCoordinates[][4] = {
 // Motor Location {A,B,C,D}
 // A--------B
 // ----------
-// C--------D
+// D--------C
   {Z, Z, Z, Z},   // Lift Set 1
   {A, B, C, D},   // Move to X and Y position in one go
 //{Y1, Y2, Y1, Y2},   // MoveSety 1
@@ -68,15 +68,15 @@ const float targetCoordinates[][4] = {
 // Function to move motors to the desired coordinates
 void moveToCoordinates(const float coordinates[]) {
   for (int i = 0; i < 4; i++) {
-    if (encoderCounts1 >= coordinates[i]) {
-      digitalWrite(motor1Pin1, HIGH);
-      digitalWrite(motor1Pin2, LOW);
+    if (encoderCounts1 <= coordinates[i]) {
+      digitalWrite(motor1Pin1, LOW);
+      digitalWrite(motor1Pin2, HIGH);
     } else {
       digitalWrite(motor1Pin1, LOW);
       digitalWrite(motor1Pin2, LOW);
     }
     
-    if (encoderCounts2 >= coordinates[i]) {
+    if (encoderCounts2 <= coordinates[i]) {
       digitalWrite(motor2Pin1, HIGH);
       digitalWrite(motor2Pin2, LOW);
     } else {
@@ -84,15 +84,15 @@ void moveToCoordinates(const float coordinates[]) {
       digitalWrite(motor2Pin2, LOW);
     }
     
-    if (encoderCounts3 >= coordinates[i]) {
-      digitalWrite(motor3Pin1, HIGH);
-      digitalWrite(motor3Pin2, LOW);
+    if (encoderCounts3 <= coordinates[i]) {
+      digitalWrite(motor3Pin1, LOW);
+      digitalWrite(motor3Pin2, HIGH);
     } else {
       digitalWrite(motor3Pin1, LOW);
       digitalWrite(motor3Pin2, LOW);
     }
     
-    if (encoderCounts4 >= coordinates[i]) {
+    if (encoderCounts4 <= coordinates[i]) {
       digitalWrite(motor4Pin1, HIGH);
       digitalWrite(motor4Pin2, LOW);
     } else {
@@ -101,7 +101,7 @@ void moveToCoordinates(const float coordinates[]) {
     }
     
     // Add a delay here if needed for the motors to reach their positions
-    delay(1000); // Example delay of 1 second
+    //delay(1000); // Example delay of 1 second
   }
 }
 
@@ -144,7 +144,14 @@ void loop() {
     float distance2 = encoderCounts2 * distancePerCount;
     float distance3 = encoderCounts3 * distancePerCount;
     float distance4 = encoderCounts4 * distancePerCount;
-  
+  /*digitalWrite(motor1Pin1, HIGH);
+  digitalWrite(motor1Pin2, LOW);
+  digitalWrite(motor2Pin1, HIGH);
+  digitalWrite(motor2Pin2, LOW);
+  digitalWrite(motor3Pin1, HIGH);
+  digitalWrite(motor3Pin2, LOW);
+  digitalWrite(motor4Pin1, HIGH);
+  digitalWrite(motor4Pin2, LOW);*/
     // Print distances to serial monitor
     Serial.print("Distance Encoder 1: ");
     Serial.print(distance1);
@@ -163,7 +170,9 @@ void loop() {
     Serial.println(" inches");
 
     // Move motors to the current set of coordinates
-    moveToCoordinates(targetCoordinates[i]);
+    //delay(10000);
+    //moveToCoordinates(targetCoordinates[i]);
+
   }
 }
 
