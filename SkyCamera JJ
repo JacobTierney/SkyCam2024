@@ -238,4 +238,3 @@ void updateEncoder4() {
   }
   
   previousState = currentState;
-}
