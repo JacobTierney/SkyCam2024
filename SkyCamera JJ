@@ -1,14 +1,14 @@
 #include <Arduino.h>
 
 // Define pins for the KY-040 rotary encoders
-const int encoderPinA1 = 2;  // CLK or DT pin for encoder 1
-const int encoderPinB1 = 3;  // DT or CLK pin for encoder 1
-const int encoderPinA2 = 4;  // CLK or DT pin for encoder 2
-const int encoderPinB2 = 5;  // DT or CLK pin for encoder 2
-const int encoderPinA3 = 6;  // CLK or DT pin for encoder 3
-const int encoderPinB3 = 7;  // DT or CLK pin for encoder 3
-const int encoderPinA4 = 8;  // CLK or DT pin for encoder 4
-const int encoderPinB4 = 9;  // DT or CLK pin for encoder 4
+const int encoderPinA1 = 38;  // CLK 1
+const int encoderPinB1 = 40;  // DT  1
+const int encoderPinA2 = 44;  // CLK 2
+const int encoderPinB2 = 42;  // DT  2
+const int encoderPinA3 = 48;  // CLK 3
+const int encoderPinB3 = 46;  // DT  3
+const int encoderPinA4 = 52;  // CLK 4
+const int encoderPinB4 = 50;  // DT  4
 
 // Motor control pins for L298N motor controller 1
 const int motor1Pin1 = 36;    // Motor 1 control pin 1
