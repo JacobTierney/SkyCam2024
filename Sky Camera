@@ -1,26 +1,26 @@
 #include <Arduino.h>
 
 // Define pins for the KY-040 rotary encoders
-const int encoderPinA1 = 2;  // CLK or DT pin for encoder 1
-const int encoderPinB1 = 3;  // DT or CLK pin for encoder 1
-const int encoderPinA2 = 4;  // CLK or DT pin for encoder 2
-const int encoderPinB2 = 5;  // DT or CLK pin for encoder 2
-const int encoderPinA3 = 6;  // CLK or DT pin for encoder 3
-const int encoderPinB3 = 7;  // DT or CLK pin for encoder 3
-const int encoderPinA4 = 8;  // CLK or DT pin for encoder 4
-const int encoderPinB4 = 9;  // DT or CLK pin for encoder 4
+const int encoderPinA1 = 38;  // CLK 1
+const int encoderPinB1 = 40;  // DT  1
+const int encoderPinA2 = 44;  // CLK 2
+const int encoderPinB2 = 42;  // DT  2
+const int encoderPinA3 = 48;  // CLK 3
+const int encoderPinB3 = 46;  // DT  3
+const int encoderPinA4 = 52;  // CLK 4
+const int encoderPinB4 = 50;  // DT  4
 
 // Motor control pins for L298N motor controller 1
-const int motor1Pin1 = 10;    // Motor 1 control pin 1
-const int motor1Pin2 = 11;    // Motor 1 control pin 2
-const int motor2Pin1 = 12;    // Motor 2 control pin 1
-const int motor2Pin2 = 13;    // Motor 2 control pin 2
+const int motor1Pin1 = 36;    // Motor 1 control pin 1
+const int motor1Pin2 = 34;    // Motor 1 control pin 2
+const int motor2Pin1 = 32;    // Motor 2 control pin 1
+const int motor2Pin2 = 30;    // Motor 2 control pin 2
 
 // Motor control pins for L298N motor controller 2
-const int motor3Pin1 = A0;    // Motor 3 control pin 1
-const int motor3Pin2 = A1;    // Motor 3 control pin 2
-const int motor4Pin1 = A2;    // Motor 4 control pin 1
-const int motor4Pin2 = A3;    // Motor 4 control pin 2
+const int motor3Pin1 = 28;    // Motor 3 control pin 1
+const int motor3Pin2 = 26;    // Motor 3 control pin 2
+const int motor4Pin1 = 24;    // Motor 4 control pin 1
+const int motor4Pin2 = 22;    // Motor 4 control pin 2
 
 // Variables to keep track of encoder counts and calculate distance
 volatile long encoderCounts1 = 0;
@@ -36,6 +36,10 @@ const float targetCoordinates[][4] = {
 // ----------
 // C--------D
   {28.8, 28.8, 28.8, 28.8},   // Lift Set 1
+  {44.4, 44.4, 44.4, 44.4}    // Lift Set 2
+  {19.2, 19.2, 19.2, 19.2}    // Lift Set 3
+//DEMO
+/*
   {1, 1, 1, 1},   // MoveSetx 1
 {1, 1, 1, 1},   // MoveSety 1
   {2, 2, 1, 1},   // AngleSet 1
@@ -50,12 +54,13 @@ const float targetCoordinates[][4] = {
 {1, 1, 1, 1},   // MoveSety 3
 {2, 2, 1, 1},   // AngleSet 3
 //{0, 0, 0, 0},   // LowerSet 3
+*/
 };
 
 // Function to move motors to the desired coordinates
 void moveToCoordinates(const float coordinates[]) {
   for (int i = 0; i < 4; i++) {
-    if (encoderCounts1 >= coordinates[i]) {
+    if (encoderCounts1 <= coordinates[i]) {
       digitalWrite(motor1Pin1, HIGH);
       digitalWrite(motor1Pin2, LOW);
     } else {
@@ -63,7 +68,7 @@ void moveToCoordinates(const float coordinates[]) {
       digitalWrite(motor1Pin2, LOW);
     }
     
-    if (encoderCounts2 >= coordinates[i]) {
+    if (encoderCounts2 <= coordinates[i]) {
       digitalWrite(motor2Pin1, HIGH);
       digitalWrite(motor2Pin2, LOW);
     } else {
@@ -71,7 +76,7 @@ void moveToCoordinates(const float coordinates[]) {
       digitalWrite(motor2Pin2, LOW);
     }
     
-    if (encoderCounts3 >= coordinates[i]) {
+    if (encoderCounts3 <= coordinates[i]) {
       digitalWrite(motor3Pin1, HIGH);
       digitalWrite(motor3Pin2, LOW);
     } else {
@@ -79,7 +84,7 @@ void moveToCoordinates(const float coordinates[]) {
       digitalWrite(motor3Pin2, LOW);
     }
     
-    if (encoderCounts4 >= coordinates[i]) {
+    if (encoderCounts4 <= coordinates[i]) {
       digitalWrite(motor4Pin1, HIGH);
       digitalWrite(motor4Pin2, LOW);
     } else {
